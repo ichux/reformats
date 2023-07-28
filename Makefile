@@ -16,10 +16,18 @@ build:
 	@docker build -t iformats .
 
 .PHONY: formats
-# help: formats 			- Formats a codebase e.g. make formats c=mypy|flake8|isort|black
+# help: formats 			- Formats a codebase
 formats:
-	@docker run --rm --volume "$(pwd):/src" --workdir /src \
+	@docker run --rm --volume "$(PWD):/src" \
 	iformats bash -c "black . && isort . --profile black"
 
-	@docker run --rm --volume "$(pwd):/src" --workdir /src iformats mypy .
-	@docker run --rm --volume "$(pwd):/src" --workdir /src iformats flake8 .
+	@docker run --rm --volume "$(PWD):/src" iformats mypy .
+	@docker run --rm --volume "$(PWD):/src" iformats flake8 .
+
+.PHONY: a
+# help: a				- Remove ununsed imports e.g. make a f=filename, make a f=./hyper
+a:
+	@docker run --rm --volume "$(PWD):/src" iformats bash -c \
+	"autoflake --in-place --remove-all-unused-imports $(f).py"
+
+# docker run -it iformats /bin/bash
