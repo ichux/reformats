@@ -1,4 +1,3 @@
-
 FROM python:3.10-slim-buster AS builder
 
 ENV VIRTUALENV=/opt/venv
